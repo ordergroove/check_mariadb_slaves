@@ -25,7 +25,7 @@ class SlaveStatusCheck(object):
         self.mode = mode
 
         # Execute the query and store the results
-        self._result = {}
+        self._slave_status = {}
         self.get_slave_status(slave_conn)
 
     def run_check(self):
@@ -34,25 +34,47 @@ class SlaveStatusCheck(object):
         check_fn()
 
     def replication_lag(self):
-        pass
+        """Check replication lag thresholds"""
+        lag = self._slave_status.get('Seconds_Behind_Master')
+        if not lag:
+            print "UNKNOWN - No replication lag reported"
+            sys.exit(3)
+
+        if not self.warning or not self.critical:
+            print "UNKNOWN - Warning and critical thresholds undefined"
+            sys.exit(3)
+
+        lag = int(lag)
+        warning = int(self.warning)
+        critical = int(self.critical)
+        lag_msg = "Slave is {0} seconds behinds master".format(lag)
+        if lag >= warning and lag < critical:
+            print "WARNING - {0}".format(lag_msg)
+            sys.exit(1)
+        elif lag >= critical:
+            print "CRITICAL - {0}".format(lag_msg)
+            sys.exit(2)
+
+        print "OK - {0}".format(lag_msg)
+        sys.exit(0)
 
     def slave_sql(self):
         """Check that Slave_SQL_Running = Yes"""
-        if self._result.get('Slave_SQL_Running') == "Yes":
-            print "OK - Slave sql is running"
-            sys.exit(0)
-        else:
+        if self._slave_status.get('Slave_SQL_Running') == "No":
             print "CRITICAL - Slave sql is not running"
             sys.exit(2)
 
+        print "OK - Slave sql is running"
+        sys.exit(0)
+
     def slave_io(self):
         """Check that Slave_IO_Running = Yes"""
-        if self._result.get('Slave_IO_Running') == "Yes":
-            print "OK - Slave io is running"
-            sys.exit(0)
-        else:
+        if self._slave_status.get('Slave_IO_Running') == "Yes":
             print "CRITICAL - Slave io is not running"
             sys.exit(2)
+
+        print "OK - Slave io is running"
+        sys.exit(0)
 
     def get_slave_status(self, slave_connection):
         """Run the query!"""
@@ -68,12 +90,12 @@ class SlaveStatusCheck(object):
             curs.execute(sql)
             conn.commit()
 
-            self._result = curs.fetchall()[0]
+            self._slave_status = curs.fetchall()[0]
             if self.verbose:
-                print self._result
+                print self._slave_status
         except MySQLdb.Error, exc:
             print "ERROR - {0}: {1}".format(exc.args[0], exc.args[1])
-            sys.exit(1)
+            sys.exit(3)
         finally:
             if conn:
                 conn.close()
@@ -103,3 +125,6 @@ def main():
                            args.connection, args.mode, args.verbose,
                            args.warning, args.critical)
     ssc.run_check()
+
+if __name__ == '__main__':
+    main()
