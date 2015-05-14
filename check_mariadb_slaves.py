@@ -36,7 +36,7 @@ class SlaveStatusCheck(object):
     def replication_lag(self):
         """Check replication lag thresholds"""
         lag = self._slave_status.get('Seconds_Behind_Master')
-        if not lag:
+        if lag is None:
             print "UNKNOWN - No replication lag reported"
             sys.exit(3)
 
