@@ -61,7 +61,9 @@ class SlaveStatusCheck(object):
     def slave_sql(self):
         """Check that Slave_SQL_Running = Yes"""
         if self._slave_status.get('Slave_SQL_Running') == "No":
-            print "CRITICAL - Slave sql is not running"
+            msg = "Slave sql is not running. Last error: {}".format(
+                self._slave_status.get('Last_SQL_Error'))
+            print "CRITICAL - {}".format(msg)
             sys.exit(2)
 
         print "OK - Slave sql is running"
@@ -69,8 +71,10 @@ class SlaveStatusCheck(object):
 
     def slave_io(self):
         """Check that Slave_IO_Running = Yes"""
-        if self._slave_status.get('Slave_IO_Running') == "Yes":
-            print "CRITICAL - Slave io is not running"
+        if self._slave_status.get('Slave_IO_Running') == "No":
+            msg = "Slave io is not running. Last error: {}".format(
+                self._slave_status.get('Last_IO_Error'))
+            print "CRITICAL - {}".format(msg)
             sys.exit(2)
 
         print "OK - Slave io is running"
