@@ -5,7 +5,26 @@ import argparse
 import MySQLdb
 
 
-class SlaveStatusCheck(object):
+class NagiosPlugin(object):
+
+    def ok_state(self, msg):
+        print "OK - {}".format(msg)
+        sys.exit(0)
+
+    def warning_state(self, msg):
+        print "WARNING - {}".format(msg)
+        sys.exit(1)
+
+    def critical_state(self, msg):
+        print "CRITICAL - {}".format(msg)
+        sys.exit(2)
+
+    def unknown_state(self, msg):
+        print "UNNKNOWN - {}".format(msg)
+        sys.exit(3)
+
+
+class SlaveStatusCheck(NagiosPlugin):
     """Class to help us run slave status queries against MariaDB"""
     REPLICATION_LAG_MODE = 'replication_lag'
     SLAVESQL_MODE = 'slave_sql'
@@ -37,48 +56,40 @@ class SlaveStatusCheck(object):
         """Check replication lag thresholds"""
         lag = self._slave_status.get('Seconds_Behind_Master')
         if lag is None:
-            print "UNKNOWN - No replication lag reported"
-            sys.exit(3)
+            self.unknown_state("No replication lag reported")
 
         if not self.warning or not self.critical:
-            print "UNKNOWN - Warning and critical thresholds undefined"
-            sys.exit(3)
+            self.unknown_state("Warning and critical thresholds undefined")
 
         lag = int(lag)
         warning = int(self.warning)
         critical = int(self.critical)
         lag_msg = "Slave is {0} seconds behinds master".format(lag)
-        if lag >= warning and lag < critical:
-            print "WARNING - {0}".format(lag_msg)
-            sys.exit(1)
-        elif lag >= critical:
-            print "CRITICAL - {0}".format(lag_msg)
-            sys.exit(2)
 
-        print "OK - {0}".format(lag_msg)
-        sys.exit(0)
+        if lag >= warning and lag < critical:
+            self.warning_state(lag_msg)
+        elif lag >= critical:
+            self.critical_state(lag_msg)
+
+        self.ok_state(lag_msg)
 
     def slave_sql(self):
         """Check that Slave_SQL_Running = Yes"""
         if self._slave_status.get('Slave_SQL_Running') == "No":
             msg = "Slave sql is not running. Last error: {}".format(
                 self._slave_status.get('Last_SQL_Error'))
-            print "CRITICAL - {}".format(msg)
-            sys.exit(2)
+            self.critical_state(msg)
 
-        print "OK - Slave sql is running"
-        sys.exit(0)
+        self.ok_state("Slave sql is running")
 
     def slave_io(self):
         """Check that Slave_IO_Running = Yes"""
         if self._slave_status.get('Slave_IO_Running') == "No":
             msg = "Slave io is not running. Last error: {}".format(
                 self._slave_status.get('Last_IO_Error'))
-            print "CRITICAL - {}".format(msg)
-            sys.exit(2)
+            self.critical_state(msg)
 
-        print "OK - Slave io is running"
-        sys.exit(0)
+        self.ok_state("Slave io is running")
 
     def get_slave_status(self, slave_connection):
         """Run the query!"""
@@ -98,8 +109,8 @@ class SlaveStatusCheck(object):
             if self.verbose:
                 print self._slave_status
         except MySQLdb.Error, exc:
-            print "ERROR - {0}: {1}".format(exc.args[0], exc.args[1])
-            sys.exit(3)
+            msg = "{0}: {1}".format(exc.args[0], exc.args[1])
+            self.unknown_state(msg)
         finally:
             if conn:
                 conn.close()
