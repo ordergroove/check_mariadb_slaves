@@ -37,19 +37,17 @@ class SlaveStatusCheck(NagiosPlugin):
              SLAVESQL_MODE,
              SLAVEIO_MODE)
 
-    def __init__(self, hostname, username, password, slave_conn,
+    def __init__(self, hostname, username, password, connection_name,
                  mode, verbose=False, warning=None, critical=None):
         self.hostname = hostname
         self.username = username
         self.password = password
         self.warning = warning
+        self.connection_name = connection_name
         self.critical = critical
         self.verbose = verbose
         self.mode = mode
-
-        # Execute the query and store the results
         self._slave_status = {}
-        self.get_slave_status(slave_conn)
 
     def run_check(self):
         """Execute the check against the given mode"""
@@ -95,10 +93,10 @@ class SlaveStatusCheck(NagiosPlugin):
 
         self.ok_state("Slave io is running")
 
-    def get_slave_status(self, slave_connection):
+    def get_slave_status(self):
         """Run the query!"""
         try:
-            sql = 'SHOW SLAVE "{0}" STATUS'.format(slave_connection)
+            sql = 'SHOW SLAVE "{0}" STATUS'.format(self.connection_name)
             conn = None
             conn = MySQLdb.Connection(
                 self.hostname,
@@ -128,7 +126,7 @@ def main():
     parser.add_argument('--username', type=str, help="MariaDB username")
     parser.add_argument('--password', type=str, help="MariaDB password")
     parser.add_argument('--connection', required=True, type=str,
-                        help="MariaDB slave connection")
+                        help="MariaDB slave connection name")
     parser.add_argument('--mode', type=str, required=True,
                         choices=SlaveStatusCheck.MODES,
                         help="slave state to check")
@@ -143,6 +141,7 @@ def main():
     ssc = SlaveStatusCheck(args.hostname, args.username, args.password,
                            args.connection, args.mode, args.verbose,
                            args.warning, args.critical)
+    ssc.get_slave_status()
     ssc.run_check()
 
 if __name__ == '__main__':
