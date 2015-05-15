@@ -8,6 +8,10 @@ import MySQLdb
 class NagiosPlugin(object):
     """Nagios Plugin base class"""
 
+    def __init__(self, warning, critical, *args, **kwargs):
+        self.warning = warning
+        self.critical = critical
+
     def run_check(self):
         raise NotImplementedError
 
@@ -39,12 +43,12 @@ class SlaveStatusCheck(NagiosPlugin):
 
     def __init__(self, hostname, username, password, connection_name,
                  mode, verbose=False, warning=None, critical=None):
+        super(SlaveStatusCheck, self).__init__(warning, critical)
+
         self.hostname = hostname
         self.username = username
         self.password = password
-        self.warning = warning
         self.connection_name = connection_name
-        self.critical = critical
         self.verbose = verbose
         self.mode = mode
         self._slave_status = {}
