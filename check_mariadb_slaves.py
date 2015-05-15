@@ -6,6 +6,10 @@ import MySQLdb
 
 
 class NagiosPlugin(object):
+    """Nagios Plugin base class"""
+
+    def run_check(self):
+        raise NotImplementedError
 
     def ok_state(self, msg):
         print "OK - {}".format(msg)
