@@ -15,21 +15,27 @@ A Nagios plugin written in Python to monitor Maria DB slave metrics. Specificall
 - Python 2.7
 
 ## Why?
-There are a number of well written and documented MySQL Nagios Plugins. While an all inclusive solution would be preferable, MariaDB is not drastically different from MySQL - there was no need to reimplement all the MySQL checks - for instance, https://github.com/lausser/check_mysql_health. That said, MariaDB's "multiple master" slaving support is unique and thus, has a slightly different syntax to check on slave status than the traditional "single master" implementation offered by MySQL. MariaDB allows you to check on the status of ALL slave connections or individual slave connections. @see https://mariadb.com/kb/en/mariadb/show-slave-status/ - this plugin leverages the ```SHOW SLAVE ["connection_name"] STATUS``` syntax to check on the slave status(es) of a particular connection.
+MariaDB's "multiple master" slaving support is unique and thus, has a slightly different syntax to check on slave status than the traditional "single master" implementation offered by MySQL. MariaDB allows you to check on the status of ALL slave connections or individual slave connections. This plugin leverages the ```SHOW SLAVE ["connection_name"] STATUS``` syntax to check on the slave status(es) of a particular connection. For more information about MariaDB slave status, see https://mariadb.com/kb/en/mariadb/show-slave-status/
+
+Most database metrics you might want to monitor for MariaDB parallel MySQL, so if you need something like that, the we use, which also helped inspire this plugin, can be found
+- http://labs.consol.de/nagios/check_mysql_health/
 
 ## Installation
 - Get the *check_mariadb_slave.py* script into your Nagios plugins directory (i.e. */usr/local/nagios/libexec*)
 - ```chmod u+x check_mariadb_slave.py```
 
 ## Command Line Parameters
-- --hostname - *optional* - hostname of the MariaDB slave
-- --username - *optional* - user to login to the MariaDB slave as
-- --password - *optional* - password of said user
-- --connection - __required__ - the ```"connection_name"``` to use in the ```SHOW SLAVE ["connection_name"] STATUS``` command
-- --mode - __required__ - the slave status to check. Current available options are ```replication_lag```, ```slave_io```, and ```slave_sql```
+- --hostname - [*optional*] - hostname of the MariaDB slave
+- --username - [*optional*] - user to login to the MariaDB slave as
+- --password - [*optional*] - password of said user
+- --connection - __[required]__ - the ```"connection_name"``` to use in the ```SHOW SLAVE ["connection_name"] STATUS``` command
+- --mode - __[required]__ - the slave status to check. Current available options are 
+  - replication_lag
+  - slave_io
+  - slave_sql
 - -w or --warning - warning threshold; currently only required for ```replication_lag``` mode
 - -c or --critical - critical threshold; currently only required for ```replication_lag``` mode
-- --verbose - *optional* - for testing purposes; currently prints out the result of the slave status query when used
+- --verbose - [*optional*] - for testing purposes; currently prints out the result of the slave status query when used
 
 ## Example Usage
 Here's an example of Nagios command and service definitions that implement this plugin:
@@ -42,7 +48,7 @@ define command {
 }
 ```
 
-### mariadb.cfg (A.K.A mariadb specific services.cfg)
+### services.cfg
 ```
 define service {    
     use                     generic-service
