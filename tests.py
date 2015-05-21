@@ -48,7 +48,7 @@ class TestSlaveStatusCheck(unittest.TestCase):
         }
         self.slave_status_check = check_mariadb_slaves.SlaveStatusCheck(**self.class_args)
 
-        # Mock the NagiosPlugin methods and how they would be have - i.e. SytemExit is raised
+        # Mock the NagiosPlugin methods and how they would behave - i.e. SytemExit is raised
         self.slave_status_check.ok_state = mock.Mock()
         self.slave_status_check.warning_state = mock.Mock(side_effect=SystemExit)
         self.slave_status_check.critical_state = mock.Mock(side_effect=SystemExit)
