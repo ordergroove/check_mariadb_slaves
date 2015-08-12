@@ -16,19 +16,19 @@ class NagiosPlugin(object):
         raise NotImplementedError
 
     def ok_state(self, msg):
-        print "OK - {}".format(msg)
+        print "OK - {0}".format(msg)
         sys.exit(0)
 
     def warning_state(self, msg):
-        print "WARNING - {}".format(msg)
+        print "WARNING - {0}".format(msg)
         sys.exit(1)
 
     def critical_state(self, msg):
-        print "CRITICAL - {}".format(msg)
+        print "CRITICAL - {0}".format(msg)
         sys.exit(2)
 
     def unknown_state(self, msg):
-        print "UNNKNOWN - {}".format(msg)
+        print "UNNKNOWN - {0}".format(msg)
         sys.exit(3)
 
 
@@ -82,7 +82,7 @@ class SlaveStatusCheck(NagiosPlugin):
     def slave_sql(self):
         """Check that Slave_SQL_Running = Yes"""
         if self._slave_status.get('Slave_SQL_Running') == "No":
-            msg = "Slave sql is not running. Last error: {}".format(
+            msg = "Slave sql is not running. Last error: {0}".format(
                 self._slave_status.get('Last_SQL_Error'))
             self.critical_state(msg)
 
@@ -91,7 +91,7 @@ class SlaveStatusCheck(NagiosPlugin):
     def slave_io(self):
         """Check that Slave_IO_Running = Yes"""
         if self._slave_status.get('Slave_IO_Running') == "No":
-            msg = "Slave io is not running. Last error: {}".format(
+            msg = "Slave io is not running. Last error: {0}".format(
                 self._slave_status.get('Last_IO_Error'))
             self.critical_state(msg)
 
