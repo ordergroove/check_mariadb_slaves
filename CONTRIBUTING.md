@@ -20,9 +20,25 @@ As for most python projects, create a virtualenv for your local version of the p
 
 ### Running Tests
 
+There are a number of alternatives:
+
     python -m unittest tests
 
+or
+
+    pip install pytest
+    py.test tests.py
+
+or, our preference, which checks against the supported versions of python (and is also how our Travis-CI is configured)
+
+    tox
+
 Always run the tests before submitting pull requests. Once you've made a pull request take a look at the Travis build status in the GitHub interface and make sure the tests are running as you'd expect.
+
+If you're unfamiliar with tox or py.test, please check these links out:
+- [tox](https://tox.readthedocs.org/en/latest/)
+- [py.test](http://pytest.org/latest/)
+- [py.test + tox](http://tox.readthedocs.org/en/latest/example/pytest.html)
 
 [angular-code-of-conduct]: https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md
 [django-code-of-conduct]: https://www.djangoproject.com/conduct/
