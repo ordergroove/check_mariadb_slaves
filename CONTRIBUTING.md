@@ -4,9 +4,9 @@ Please remember to extend the same courtesy to others as you would wish them to 
 
 Keep it clean, constructive and creative. Let's make sure everyone feels welcome.
 
-## Issues and Feature Requests
+## Issues, Features, and Questions
 
-For now, issues and feature requests will have to be tracked through the github issue tracker while we decide the best forum(s) for different types of requests.
+Usage questions should be directed to the [discussion group][google-group]. Feature requests, bug reports and other issues should be raised on the GitHub issue tracker.
 
 Don't be bashful though - feel free to create a pull request with your proposed feature/bug fix.
 
@@ -26,3 +26,4 @@ Always run the tests before submitting pull requests. Once you've made a pull re
 
 [angular-code-of-conduct]: https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md
 [django-code-of-conduct]: https://www.djangoproject.com/conduct/
+[google-group]: https://groups.google.com/forum/?fromgroups#!forum/maria-db-slave-nagios-plugin
