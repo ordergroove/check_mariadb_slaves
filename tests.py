@@ -12,8 +12,7 @@ class TestNagiosPlugin(unittest.TestCase):
         self.msg = "test"
 
     def test_run_check(self, mock_sys):
-        self.assertRaises(NotImplementedError,
-                          lambda: self.plugin_inst.run_check())
+        self.assertRaises(NotImplementedError, self.plugin_inst.run_check)
 
     def test_ok_state(self, mock_sys):
         self.plugin_inst.ok_state(self.msg)
@@ -55,7 +54,7 @@ class TestSlaveStatusCheck(unittest.TestCase):
         self.slave_status_check.unknown_state = mock.Mock(side_effect=SystemExit)
 
     def test_run_check(self):
-        self.assertRaises(AttributeError, lambda: self.slave_status_check.run_check())
+        self.assertRaises(AttributeError, self.slave_status_check.run_check)
 
         self.slave_status_check.replication_lag = mock.Mock()
         self.slave_status_check.mode = self.slave_status_check.REPLICATION_LAG_MODE
@@ -64,13 +63,13 @@ class TestSlaveStatusCheck(unittest.TestCase):
 
     def test_replication_lag(self):
 
-        self.assertRaises(SystemExit, lambda: self.slave_status_check.replication_lag())
+        self.assertRaises(SystemExit, self.slave_status_check.replication_lag)
         self.slave_status_check.unknown_state.assert_called_once_with("No replication lag reported")
 
         self.slave_status_check.unknown_state.reset_mock()
         self.slave_status_check.unknown_state.side_effect = SystemExit
         self.slave_status_check._slave_status["Seconds_Behind_Master"] = 0
-        self.assertRaises(SystemExit, lambda: self.slave_status_check.replication_lag())
+        self.assertRaises(SystemExit, self.slave_status_check.replication_lag)
         self.slave_status_check.unknown_state.assert_called_once_with("Warning and critical thresholds undefined")
 
         lag = 1
@@ -83,13 +82,13 @@ class TestSlaveStatusCheck(unittest.TestCase):
 
         lag = 10
         self.slave_status_check._slave_status["Seconds_Behind_Master"] = lag
-        self.assertRaises(SystemExit, lambda: self.slave_status_check.replication_lag())
+        self.assertRaises(SystemExit, self.slave_status_check.replication_lag)
         expected_msg = "Slave is {0} seconds behinds master".format(lag)
         self.slave_status_check.warning_state.assert_called_once_with(expected_msg)
 
         lag = 100
         self.slave_status_check._slave_status["Seconds_Behind_Master"] = lag
-        self.assertRaises(SystemExit, lambda: self.slave_status_check.replication_lag())
+        self.assertRaises(SystemExit, self.slave_status_check.replication_lag)
         expected_msg = "Slave is {0} seconds behinds master".format(lag)
         self.slave_status_check.critical_state.assert_called_once_with(expected_msg)
 
@@ -102,7 +101,7 @@ class TestSlaveStatusCheck(unittest.TestCase):
         self.slave_status_check._slave_status["Slave_SQL_Running"] = "No"
         self.slave_status_check._slave_status["Last_SQL_Error"] = sql_error
 
-        self.assertRaises(SystemExit, lambda: self.slave_status_check.slave_sql())
+        self.assertRaises(SystemExit, self.slave_status_check.slave_sql)
 
         expected_msg = "Slave sql is not running. Last error: {0}".format(sql_error)
         self.slave_status_check.critical_state.assert_called_once_with(expected_msg)
@@ -116,7 +115,7 @@ class TestSlaveStatusCheck(unittest.TestCase):
         self.slave_status_check._slave_status["Slave_IO_Running"] = "No"
         self.slave_status_check._slave_status["Last_IO_Error"] = sql_error
 
-        self.assertRaises(SystemExit, lambda: self.slave_status_check.slave_io())
+        self.assertRaises(SystemExit, self.slave_status_check.slave_io)
 
         expected_msg = "Slave io is not running. Last error: {0}".format(sql_error)
         self.slave_status_check.critical_state.assert_called_once_with(expected_msg)
@@ -124,7 +123,7 @@ class TestSlaveStatusCheck(unittest.TestCase):
     @mock.patch('check_mariadb_slaves.MySQLdb.Connection')
     def test_get_slave_status_exc(self, mock_mysqldb_connection):
         mock_mysqldb_connection.side_effect = MySQLdb.Error('test code', 'test exc')
-        self.assertRaises(SystemExit, lambda: self.slave_status_check.get_slave_status())
+        self.assertRaises(SystemExit, self.slave_status_check.get_slave_status)
         self.slave_status_check.unknown_state.assert_called_once_with('test code: test exc')
 
     @mock.patch('check_mariadb_slaves.MySQLdb')
