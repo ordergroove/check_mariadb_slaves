@@ -1,5 +1,5 @@
 # check_mariadb_slaves
-[![Build Status](https://travis-ci.org/ordergroove/check_mariadb_slaves.svg?branch=master)](https://travis-ci.org/ordergroove/check_mariadb_slaves)
+[![Build Status](https://travis-ci.org/ordergroove/check_mariadb_slaves.svg?branch=master)](https://travis-ci.org/ordergroove/check_mariadb_slaves) [![codecov.io](http://codecov.io/github/ordergroove/check_mariadb_slaves/coverage.svg?branch=master)](http://codecov.io/github/ordergroove/check_mariadb_slaves?branch=master)
 
 A Nagios plugin written in Python to monitor Maria DB slave metrics. Specifically:
 - Replication Lag
