@@ -15,7 +15,7 @@ A Nagios plugin written in Python to monitor Maria DB slave metrics. Specificall
 - Python (2.6, 2.7)
 
 ## Python 3.X?
-This package leverage the MySQL-python package, which has not been ported over for python 3 yet: https://pypi.python.org/pypi/MySQL-python/1.2.5
+Unfortunately, there is no Python 3 support because this package leverages the [MySQL-python](https://pypi.python.org/pypi/MySQL-python/1.2.5), which has not yet been ported over for Python 3.
 
 ## Why?
 MariaDB's "multiple master" slaving support is unique and thus, has a slightly different syntax to check on slave status than the traditional "single master" implementation offered by MySQL. MariaDB allows you to check on the status of ALL slave connections or individual slave connections. This plugin leverages the ```SHOW SLAVE ["connection_name"] STATUS``` syntax to check on the slave status(es) of a particular connection. For more information about MariaDB slave status, see https://mariadb.com/kb/en/mariadb/show-slave-status/
