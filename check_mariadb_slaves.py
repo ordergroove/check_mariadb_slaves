@@ -122,7 +122,7 @@ class SlaveStatusCheck(NagiosPlugin):
                 conn.close()
 
 
-def main(): # pragma: no cover
+def main(args=sys.argv):
     """starter method"""
     parser = argparse.ArgumentParser(description='MariaDB slave status checker')
     parser.add_argument('--hostname', default='localhost', type=str,
@@ -141,7 +141,7 @@ def main(): # pragma: no cover
     parser.add_argument('--verbose', action='store_true', default=False,
                         help="enable verbose mode")
 
-    args = parser.parse_args()
+    args = parser.parse_args(args)
     ssc = SlaveStatusCheck(args.hostname, args.username, args.password,
                            args.connection, args.mode, args.verbose,
                            args.warning, args.critical)
@@ -149,4 +149,4 @@ def main(): # pragma: no cover
     ssc.run_check()
 
 if __name__ == '__main__':
-    main()
+    main() # pragma: no cover

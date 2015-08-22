@@ -135,3 +135,32 @@ class TestSlaveStatusCheck(unittest.TestCase):
 
         self.assertEqual(cursor_ret[0], self.slave_status_check._slave_status)
         mock_mysqldb.Connection.return_value.close.assert_called_once_with()
+
+
+@mock.patch('check_mariadb_slaves.SlaveStatusCheck')
+class TestMain(unittest.TestCase):
+
+    def setUp(self):
+        self.args = ['--connection', 'connection', '--mode', 'test']
+
+    def test_args_parse_exc(self, mock_SSC):
+        mock_SSC.MODES = ('test')
+
+        args = []
+        self.assertRaises(SystemExit, check_mariadb_slaves.main, args)
+
+        args = self.args[2:]
+        self.assertRaises(SystemExit, check_mariadb_slaves.main, args)
+
+    def test_args_parse(self, mock_SSC):
+        mock_SSC.MODES = ('test')
+        check_mariadb_slaves.main(self.args)
+        mock_SSC.assert_called_once_with('localhost', None, None, 'connection',
+                                         'test', False, None, None)
+
+        mock_SSC.reset_mock()
+        self.args += ['--username', 'test', '--password', 'test', '-w', '10',
+                      '-c', '20', '--verbose']
+        check_mariadb_slaves.main(self.args)
+        mock_SSC.assert_called_once_with('localhost', 'test', 'test',
+                                         'connection', 'test', True, 10, 20)
