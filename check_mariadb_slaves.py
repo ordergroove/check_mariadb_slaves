@@ -122,8 +122,11 @@ class SlaveStatusCheck(NagiosPlugin):
                 conn.close()
 
 
-def main(args=sys.argv):
+def main(args=None):
     """starter method"""
+    if args is None:
+        args = sys.argv[1:]
+
     parser = argparse.ArgumentParser(description='MariaDB slave status checker')
     parser.add_argument('--hostname', default='localhost', type=str,
                         help="MariaDB hostname")

@@ -2,6 +2,7 @@ import mock
 import unittest
 import check_mariadb_slaves
 import MySQLdb
+import sys
 
 
 @mock.patch('check_mariadb_slaves.sys')
@@ -162,5 +163,11 @@ class TestMain(unittest.TestCase):
         self.args += ['--username', 'test', '--password', 'test', '-w', '10',
                       '-c', '20', '--verbose']
         check_mariadb_slaves.main(self.args)
+        mock_SSC.assert_called_once_with('localhost', 'test', 'test',
+                                         'connection', 'test', True, 10, 20)
+
+        mock_SSC.reset_mock()
+        sys.argv = ["myscriptname.py"] + self.args
+        check_mariadb_slaves.main()
         mock_SSC.assert_called_once_with('localhost', 'test', 'test',
                                          'connection', 'test', True, 10, 20)
