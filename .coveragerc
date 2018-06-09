@@ -1,6 +1,5 @@
 [run]
 branch = True
-include = .
 
 [report]
 show_missing=True
