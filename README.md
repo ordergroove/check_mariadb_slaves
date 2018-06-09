@@ -73,7 +73,7 @@ define service {
 ```
 
 ## Special Thanks to OrderGroove
-We would like to take this opportunity to thank everyone at <a href="http://www.ordergroove.com" target="_blank"><img src="http://www.ordergroove.com/sites/all/themes/order_groove/ordergroove_logo.png" width="100"/></a> for allowing us the time to work on open sourcing this project. Without their support, this project would not exist.
+We would like to take this opportunity to thank everyone at <a href="http://www.ordergroove.com" target="_blank">![image](images/OrderGroove.png)</a> for allowing us the time to work on open sourcing this project. Without their support, this project would not exist.
 
 License
 =======
