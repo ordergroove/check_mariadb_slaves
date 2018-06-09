@@ -5,6 +5,7 @@ __all__ = ['NagiosPlugin']
 
 import sys
 
+from .password_sanitizer import sanitize_passwords
 
 class NagiosPlugin(object):
     def __init__(self, warning, critical, *args, **kwargs):
@@ -26,7 +27,7 @@ class NagiosPlugin(object):
 
     @staticmethod
     def critical_state(msg):
-        print "CRITICAL - {0}".format(msg)
+        print "CRITICAL - {0}".format(sanitize_passwords(msg))
         sys.exit(2)
 
     @staticmethod
