@@ -87,9 +87,9 @@ class SlaveStatusCheck(NagiosPlugin):
             conn.commit()
 
             self._slave_status = curs.fetchall()[0]
-            if self.verbose:
-                print self._slave_status
-        except MySQLdb.Error, exc:
+            if self.verbose: # pragma: no cover
+                print(self._slave_status)
+        except MySQLdb.Error as exc:
             msg = "{0}: {1}".format(exc.args[0], exc.args[1])
             self.unknown_state(msg)
         finally:

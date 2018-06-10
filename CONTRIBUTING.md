@@ -20,26 +20,27 @@ As for most python projects, create a virtualenv for your local version of the p
 
 ### Running Tests
 
-There are a number of alternatives:
+There are a couple of ways to do this and both are recommended:
 
-    python -m unittest tests
+    pip install pytest pytest-cov tox
+    pytest --cov=.
 
-or
+which will run all the tests in your environment's version of python and provide you with a full coverage report.
 
-    pip install pytest
-    py.test tests.py
-
-or, our preference, which checks against the supported versions of python (and is also how our Travis-CI is configured)
+Once you're happy with your feature, please use `tox` to test the supported versions of python
 
     tox
 
 Always run the tests before submitting pull requests. Once you've made a pull request take a look at the Travis build status in the GitHub interface and make sure the tests are running as you'd expect.
 
 If you're unfamiliar with tox or py.test, please check these links out:
-- [tox](https://tox.readthedocs.org/en/latest/)
-- [py.test](http://pytest.org/latest/)
-- [py.test + tox](http://tox.readthedocs.org/en/latest/example/pytest.html)
+- [tox][tox]
+- [py.test][pytest]
+- [py.test + tox][pytest-tox]
 
 [angular-code-of-conduct]: https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md
 [django-code-of-conduct]: https://www.djangoproject.com/conduct/
 [google-group]: https://groups.google.com/forum/?fromgroups#!forum/maria-db-slave-nagios-plugin
+[tox]: https://tox.readthedocs.org/en/latest/
+[pytest]: http://pytest.org/latest/
+[pytest-tox]: http://tox.readthedocs.org/en/latest/example/pytest.html
