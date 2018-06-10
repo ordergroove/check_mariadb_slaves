@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 """MariaDB slave status checker"""
 
 import argparse
