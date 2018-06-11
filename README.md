@@ -22,8 +22,18 @@ Most database metrics you may want to monitor on MariaDB actually parallel MySQL
 - https://exchange.nagios.org/directory/MySQL/check_mysql_health/details
 
 ## Installation
-- Get the *check_mariadb_slave.py* script into your Nagios plugins directory (i.e. */usr/local/nagios/libexec*)
-- ```chmod u+x check_mariadb_slave.py```
+- Clone the repo
+- Double check `check_mariadb_slaves.py` is executable
+- Install package requirements, if not globally, at least in the context of the user running the plugin
+- Create a link to `check_mariadb_slaves.py` from your Nagios plugins directory (i.e. */usr/local/nagios/libexec*)
+
+You may have different paths, but here's an example of the above:
+
+    $ git clone git@github.com:ordergroove/check_mariadb_slaves.git
+    $ cd check_mariadb_slaves
+    $ chmod u+x check_mariadb_slaves.py
+    $ pip install --user -rrequirements.txt
+    $ ln -s /path/to/repo/check_mariadb_slaves.py /usr/local/nagios/libexec/check_mariadb_slaves.py
 
 ## Command Line Parameters
 - --hostname - [*optional*] - hostname of the MariaDB slave
