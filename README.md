@@ -1,7 +1,7 @@
 # check_mariadb_slaves
 [![Build Status](https://travis-ci.org/ordergroove/check_mariadb_slaves.svg?branch=master)](https://travis-ci.org/ordergroove/check_mariadb_slaves) [![codecov.io](http://codecov.io/github/ordergroove/check_mariadb_slaves/coverage.svg?branch=master)](http://codecov.io/github/ordergroove/check_mariadb_slaves?branch=master)
 
-A Nagios plugin written in Python to monitor Maria DB slave metrics. Specifically:
+A Nagios plugin written in Python to monitor MariaDB slave metrics. Specifically:
 - Replication Lag
 - Slave IO running
 - Slave SQL running
@@ -12,10 +12,8 @@ A Nagios plugin written in Python to monitor Maria DB slave metrics. Specificall
 - You're running a MariaDB server that is slaving data
 
 ## Requirements
-- Python (2.6, 2.7)
-
-## Python 3.X?
-Unfortunately, there is no Python 3 support because this package leverages  [MySQL-python](https://pypi.python.org/pypi/MySQL-python/1.2.5), which has not yet been ported over for Python 3.
+- Python (2.7, 3.4, 3.5, 3.6)
+- [mysqlclient](https://pypi.org/project/mysqlclient/)
 
 ## Why?
 MariaDB's "multiple master" slaving support is unique and thus, has a slightly different syntax to check on slave status than the traditional "single master" implementation offered by MySQL. MariaDB allows you to check on the status of ALL slave connections or individual slave connections. This plugin leverages the ```SHOW SLAVE ["connection_name"] STATUS``` syntax to check on the slave status(es) of a particular connection. For more information about MariaDB slave status, see https://mariadb.com/kb/en/mariadb/show-slave-status/
@@ -24,8 +22,20 @@ Most database metrics you may want to monitor on MariaDB actually parallel MySQL
 - https://exchange.nagios.org/directory/MySQL/check_mysql_health/details
 
 ## Installation
-- Get the *check_mariadb_slave.py* script into your Nagios plugins directory (i.e. */usr/local/nagios/libexec*)
-- ```chmod u+x check_mariadb_slave.py```
+- Download [the tarball of your preferred version](https://github.com/ordergroove/check_mariadb_slaves/releases)
+- Expand the archive
+- Double check `check_mariadb_slaves.py` is executable
+- Install package requirements, if not globally, at least in the context of the user running the plugin
+- Create a link to `check_mariadb_slaves.py` from your Nagios plugins directory (i.e. */usr/local/nagios/libexec*)
+
+You may have different paths, but here's an example of the above:
+
+    $ wget https://github.com/ordergroove/check_mariadb_slaves/archive/v2.0.tar.gz
+    $ tar xzvf v2.0.tar.gz
+    $ cd check_mariadb_slaves-2.0
+    $ chmod u+x check_mariadb_slaves.py
+    $ pip install --user -rrequirements.txt
+    $ ln -s /path/to/archive/check_mariadb_slaves-2.0/check_mariadb_slaves.py /usr/local/nagios/libexec/check_mariadb_slaves.py
 
 ## Command Line Parameters
 - --hostname - [*optional*] - hostname of the MariaDB slave
@@ -76,7 +86,7 @@ define service {
 ```
 
 ## Special Thanks to OrderGroove
-We would like to take this opportunity to thank everyone at <a href="http://www.ordergroove.com" target="_blank"><img src="http://www.ordergroove.com/sites/all/themes/order_groove/ordergroove_logo.png" width="100"/></a> for allowing us the time to work on open sourcing this project. Without their support, this project would not exist.
+We would like to take this opportunity to thank everyone at <a href="http://www.ordergroove.com" target="_blank">![image](images/OrderGroove.png)</a> for allowing us the time to work on open sourcing this project. Without their support, this project would not exist.
 
 License
 =======
