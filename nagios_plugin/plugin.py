@@ -5,6 +5,7 @@ __all__ = ['SlaveStatusCheck']
 
 import MySQLdb
 from .base import NagiosPlugin
+from .lag_formatter import format_lag
 
 
 class SlaveStatusCheck(NagiosPlugin):
@@ -45,7 +46,7 @@ class SlaveStatusCheck(NagiosPlugin):
         lag = int(lag)
         warning = int(self.warning)
         critical = int(self.critical)
-        lag_msg = "Slave is {0} seconds behind master | replication_lag={0};{1};{2}".format(lag, warning, critical)
+        lag_msg = "Slave is {0} behind master | replication_lag={0};{1};{2}".format(format_lag(lag), warning, critical)
 
         if lag >= warning and lag < critical:
             self.warning_state(lag_msg)
