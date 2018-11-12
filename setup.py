@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='check-mariadb-slaves',
-    version='2.0',
+    version='2.1',
     include_package_data=True,
     packages=find_packages(),
     install_requires=[
