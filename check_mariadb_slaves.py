@@ -28,11 +28,13 @@ def main(args=None):
                         help="critical limit")
     parser.add_argument('--verbose', action='store_true', default=False,
                         help="enable verbose mode")
+    parser.add_argument('-H', '--human-readable', action='store_true',
+                        default=False, help="human readable replication lag")
 
     args = parser.parse_args(args)
     ssc = SlaveStatusCheck(args.hostname, args.username, args.password,
                            args.connection, args.mode, args.verbose,
-                           args.warning, args.critical)
+                           args.warning, args.critical, args.human_readable)
     ssc.get_slave_status()
     ssc.run_check()
 

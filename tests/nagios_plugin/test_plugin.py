@@ -49,19 +49,31 @@ class TestSlaveStatusCheck(unittest.TestCase):
         self.slave_status_check.critical = 100
         self.slave_status_check._slave_status["Seconds_Behind_Master"] = lag
         self.slave_status_check.replication_lag()
-        expected_msg = "Slave is {0} behind master | replication_lag={0};10;100".format(format_lag(lag))
+        expected_msg = "Slave is {0} behind master | replication_lag={0};10;100".format(lag)
         self.slave_status_check.ok_state.assert_called_once_with(expected_msg)
 
         lag = 10
         self.slave_status_check._slave_status["Seconds_Behind_Master"] = lag
         self.assertRaises(SystemExit, self.slave_status_check.replication_lag)
-        expected_msg = "Slave is {0} behind master | replication_lag={0};10;100".format(format_lag(lag))
+        expected_msg = "Slave is {0} behind master | replication_lag={0};10;100".format(lag)
         self.slave_status_check.warning_state.assert_called_once_with(expected_msg)
 
         lag = 100
         self.slave_status_check._slave_status["Seconds_Behind_Master"] = lag
         self.assertRaises(SystemExit, self.slave_status_check.replication_lag)
-        expected_msg = "Slave is {0} behind master | replication_lag={0};10;100".format(format_lag(lag))
+        expected_msg = "Slave is {0} behind master | replication_lag={0};10;100".format(lag)
+        self.slave_status_check.critical_state.assert_called_once_with(expected_msg)
+
+    def test_human_readable_arg_formats_replication_lag(self):
+        lag = 100
+        formatted_lag = format_lag(lag)
+        self.slave_status_check.warning = 10
+        self.slave_status_check.critical = 100
+        self.slave_status_check.human_readable = True
+        self.slave_status_check._slave_status["Seconds_Behind_Master"] = lag
+        self.slave_status_check._slave_status["Seconds_Behind_Master"] = lag
+        self.assertRaises(SystemExit, self.slave_status_check.replication_lag)
+        expected_msg = "Slave is {0} behind master | replication_lag={0};10;100".format(formatted_lag)
         self.slave_status_check.critical_state.assert_called_once_with(expected_msg)
 
     def test_slave_sql(self):

@@ -26,17 +26,17 @@ class TestMain(unittest.TestCase):
         mock_SSC.MODES = ('test')
         check_mariadb_slaves.main(self.args)
         mock_SSC.assert_called_once_with('localhost', None, None, 'connection',
-                                         'test', False, None, None)
+                                         'test', False, None, None, False)
 
         mock_SSC.reset_mock()
         self.args += ['--username', 'test', '--password', 'test', '-w', '10',
                       '-c', '20', '--verbose']
         check_mariadb_slaves.main(self.args)
         mock_SSC.assert_called_once_with('localhost', 'test', 'test',
-                                         'connection', 'test', True, 10, 20)
+                                         'connection', 'test', True, 10, 20, False)
 
         mock_SSC.reset_mock()
         sys.argv = ["myscriptname.py"] + self.args
         check_mariadb_slaves.main()
         mock_SSC.assert_called_once_with('localhost', 'test', 'test',
-                                         'connection', 'test', True, 10, 20)
+                                         'connection', 'test', True, 10, 20, False)

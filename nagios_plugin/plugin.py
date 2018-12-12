@@ -17,8 +17,8 @@ class SlaveStatusCheck(NagiosPlugin):
              SLAVESQL_MODE,
              SLAVEIO_MODE)
 
-    def __init__(self, hostname, username, password, connection_name,
-                 mode, verbose=False, warning=None, critical=None):
+    def __init__(self, hostname, username, password, connection_name, mode,
+                 verbose=False, warning=None, critical=None, human_readable=False):
         super(SlaveStatusCheck, self).__init__(warning, critical)
 
         self.hostname = hostname
@@ -26,6 +26,7 @@ class SlaveStatusCheck(NagiosPlugin):
         self.password = password
         self.connection_name = connection_name
         self.verbose = verbose
+        self.human_readable = human_readable
         self.mode = mode
         self._slave_status = {}
 
@@ -46,7 +47,8 @@ class SlaveStatusCheck(NagiosPlugin):
         lag = int(lag)
         warning = int(self.warning)
         critical = int(self.critical)
-        lag_msg = "Slave is {0} behind master | replication_lag={0};{1};{2}".format(format_lag(lag), warning, critical)
+        formatted_lag = format_lag(lag) if self.human_readable else lag
+        lag_msg = "Slave is {0} behind master | replication_lag={0};{1};{2}".format(formatted_lag, warning, critical)
 
         if lag >= warning and lag < critical:
             self.warning_state(lag_msg)

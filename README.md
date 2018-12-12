@@ -49,6 +49,7 @@ You may have different paths, but here's an example of the above:
 - -w or --warning - warning threshold; currently only required for ```replication_lag``` mode
 - -c or --critical - critical threshold; currently only required for ```replication_lag``` mode
 - --verbose - [*optional*] - for testing purposes; currently prints out the result of the slave status query when used
+- -H or --human-readable - [*optional*] - display human readable replication lag (only valid for ```replication_lag``` mode)
 
 ## Example Usage
 Here's an example of Nagios command and service definitions that implement this plugin:
