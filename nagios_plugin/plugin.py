@@ -47,8 +47,13 @@ class SlaveStatusCheck(NagiosPlugin):
         lag = int(lag)
         warning = int(self.warning)
         critical = int(self.critical)
-        formatted_lag = format_lag(lag) if self.human_readable else lag
-        lag_msg = "Slave is {0} behind master | replication_lag={0};{1};{2}".format(formatted_lag, warning, critical)
+
+        if self.human_readable:
+            formatted_lag = format_lag(lag)
+        else:
+            formatted_lag = '{} seconds'.format(lag)
+
+        lag_msg = "Slave is {0} behind master | replication_lag={1};{2};{3}".format(formatted_lag, lag, warning, critical)
 
         if lag >= warning and lag < critical:
             self.warning_state(lag_msg)
